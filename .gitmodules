@@ -1,0 +1,3 @@
+[submodule "aws/AWS-CSAA-ACloudGuru"]
+	path = aws/AWS-CSAA-ACloudGuru
+	url = https://github.com/stevenxchung/AWS-CSAA-ACloudGuru.git
