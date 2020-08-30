@@ -165,3 +165,24 @@ tar pxvf archive.tar
 gunzip file.tar.gz
 tar xvf file.tar
 ```
+
+## Linux Directory Hierarchy Essentials
+
+![Dir Hierarchy](images/directory-hierarchy.png)
+
+**/bin** Contains executables including most of the basic Unix commands. Most of the programs in /bin are in binary format.
+
+
+**/dev** Contains device files.
+
+
+**/etc** This core system configuration directory (pronounced EHT-see) contains the user password, boot, device, networking, and other setup files. Many items in /etc are specific to the machine’s hardware.
+
+
+**/home** Holds personal directories for regular users.
+
+
+**/lib** This directory holds library files containing code that executables can use. There are two types of libraries: static and shared. The /lib directory should contain only shared libraries, but other lib directories, such as /usr/lib, contain both varieties as well as other auxiliary files.
+
+
+**/**
