@@ -168,7 +168,7 @@ tar xvf file.tar
 
 ## Linux Directory Hierarchy Essentials
 
-![Dir Hierarchy](linux/images/directory-hierarchy.png)
+![Dir Hierarchy](./images/directory-hierarchy.png)
 
 **/bin** Contains executables including most of the basic Unix commands. Most of the programs in /bin are in binary format.
 
