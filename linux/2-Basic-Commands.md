@@ -48,7 +48,7 @@ kill pid
 kill -STOP pid
 # continue signal
 kill -CONT pid
-# temporary stop signal
+# Temporary SToP signal
 kill -TSTP pid
 ```
 
@@ -67,4 +67,101 @@ But despite its utility and the habits of many experienced users, job control is
 ### Background Processes
 Normally, when you run a Unix command from the shell, you don’t get the shell prompt back until the program finishes executing. However, you can detach a process from the shell and put it in the “background” with the ampersand (&); this gives you the prompt back.
 
-a
+```bash
+# this will run the gunzip command on the background
+gunzip file.gz &
+# to bring it to foreground use fg
+fg
+# to bring it to background use bg
+bg
+```
+
+
+## File Modes And Permissions
+
+```bash
+ls -l
+# outputs:
+# -rw-r--r-- 1 juser somegroup 7041 Mar 26 19:34 endnotes.html
+```
+
+`-rw-r--r--` is called the file's mode. The file’s mode represents the file’s permissions and some extra information. There are four parts to the mode:
+
+(`-`) Type. [`-` means regular file, `d` means directory]
+
+
+(`rw-`) User Permissions
+
+
+(`r--`) Group Permissions
+
+
+(`r--`) Other (aka. world) Permissions, applied to everyone in the system
+
+
+
+
+### Modifying Permissions
+
+```bash
+# give group the read permission
+chmod g+r file
+# give other (aka. system or world) read permission
+chmod o+r file
+# remove groups write permission 
+chmod g-r file 
+# change permissions via numbers
+# 6 in binary is b110, so user permissions is read and write.
+# 4 is b100, so group and system permissions is just read. 
+chmod 644 file
+```
+
+### Symbolic Links
+A symbolic link is a file that points to another file or a directory, effectively creating an alias (like a shortcut in Windows). Symbolic links offer quick access to obscure directory paths.
+
+```bash
+# Don’t forget the -s option when creating a symbolic link. 
+# Without it, ln creates a hard link, giving an 
+# additional real filename to a single file
+ln -s target linkname
+```
+
+## archiving and compressing files
+
+### gzip (compression)
+Unlike the zip programs for other operating systems, gzip does not create archives of files.
+```bash
+# to zip file to file.gz 
+gzip file
+# to unzip file
+gunzip file.gz
+```
+
+### tar (archive)
+To create an archive, use tar instead:
+```bash
+# zipping with tar
+# options: (c)reate (v)erbose (f)ile
+tar cvf archive.tar file1 file2 file3
+
+# table of contents
+# options: (t)able (v)erbose (f)ile
+tar tvf archive.tar
+
+# unzipping with tar
+# options: e(x)tract (v)erbose (f)ile
+tar xvf archive.tar
+
+# unzipping while preserving (p)ermissions
+# options: preserve-(p)ermissions e(x)tract (v)erbose (f)ile
+tar pxvf archive.tar
+```
+
+### Compressed Archives (.tar.gz)
+
+
+```bash
+# to decompress and extract run:
+gunzip file.tar.gz
+tar xvf file.tar
+```
