@@ -1,4 +1,5 @@
-### The Bourne shell: /bin/sh
+# Basics
+## The Bourne shell: /bin/sh
 
 A shell is aprogram that runs commands, like the ones that users enter. The shell also serves as a small programming environment.
 

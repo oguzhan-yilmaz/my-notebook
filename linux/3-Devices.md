@@ -1,3 +1,4 @@
+# Devices
 ## Device Files
 
 - It is easy to manipulate most devices on a Unix system because the kernel presents many of the device I/O interfaces to user processes as files. These device files are sometimes called __device nodes__. Not only can a programmer use regular file operations to work with a device, but some devices are also accessible to standard programs like cat, so you don’t have to be a programmer to use a device. 

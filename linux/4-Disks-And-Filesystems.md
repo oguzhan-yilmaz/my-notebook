@@ -1,4 +1,4 @@
-# Disks and FileSystems
+# Disks and Filesystems
 
 Linux Hierarchy is something like this:
 

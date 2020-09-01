@@ -1,3 +1,4 @@
+# The Big Picture
 Processes —the running programs that the kernel manages— collectively make up the system’s upper level, called user space.
 
 
