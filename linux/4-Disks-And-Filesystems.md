@@ -112,7 +112,7 @@ mount -n -o remount /
 ```
 
 ## Filesystem Capacity
-
+To view the size and utilization of your currently mounted filesystems, use the `df` command.
 ```bash
 # get the capacity of filesystem
 df
@@ -120,4 +120,83 @@ df
 df -h
 # show in MBs
 df -m 
+```
+
+## Checking and Repairing Filesystems
+- The optimizations that Unix filesystems offer are made possible by a sophisticated database mechanism. For filesystems to work seamlessly, the kernel has to trust that there are no errors in a mounted filesystem. If errors exist, data loss and system crashes may result.
+
+- Filesystem errors are usually due to a user shutting down the system in a rude way (for example, by pulling out the power cord). In such cases, the filesystem cache in memory may not match the data on the disk, and the system also may be in the process of altering the filesystem when you happen to give the computer a kick.
+
+- Although a new generation of filesystems supports journals to make filesystem corruption far less common, you should always shut the system down properly. And regardless of the filesystem in use, filesystem checks are still necessary every now and to maintain sanity
+
+- The tool to check a filesystem is `fsck`.
+
+- **You should never use fsck on a mounted filesystem** because the kernel may alter the disk data as you run the check, causing runtime mismatches that can crash your system and corrupt files.
+```bash
+# manual mode, asks questions,
+# argument is a mountpoint as listed in /etc/fstab
+fsck mountpoint
+# run automatic mode
+fsck -p mountpoint
+# non modifier mode
+fsck -n mountpoint
+```
+
+- If fsck finds a problem in manual mode, it stops and asks you a question relevant to fixing the problem. These questions deal with the internal structure of the filesystem, such as reconnecting loose inodes and clearing blocks (an inode is a building block of the filesystem). When fsck asks you about reconnecting an inode, __it has found a file that doesn’t appear to have a name__. 
+
+- When reconnecting such a file, fsck places the file in the lost+found directory in the filesystem, with a number as the filename. If this happens, you need to guess the name
+based on the content of the file; the original name is probably gone.
+
+- In general, it’s pointless to sit through the fsck repair process if you’ve just uncleanly shut down the system, because fsck may have a lot of minor errors to fix. 
+
+- Fortunately, e2fsck has a `-p` option that automatically fixes
+ordinary problems without asking and aborts when there’s a serious error.
+In fact, Linux distributions run some variant of `fsck -p` at boot time.
+
+- If you think that something really bad has happened, try running
+`fsck -n` to **check the filesystem without modifying anything**. 
+
+
+## Special-Purpose Filesystems
+
+- Not all filesystems represent storage on physical media. Specifically, most versions of Unix have filesystems that serve as system interfaces. That is, rather than serving only as a means to store data on a device, a filesystem can represent system information such as process IDs and kernel diagnostics. 
+
+- This idea goes back to the /dev mechanism, which is an early model of using files for I/O interfaces. The /proc idea came from the eighth edition of research Unix, implemented by Tom J. Killian and accelerated when Bell Labs (including many of the original Unix designers) created Plan 9—a research operating system that took filesystem abstraction to a whole new level.
+
+### **proc** 
+- proc Mounted on /proc. The name proc is actually an **abbreviation for process**. Each numbered directory inside /proc is actually the process ID of a current process on the system; the files in those directories represent various aspects of the processes. 
+
+- The file /proc/self represents the current process. The Linux proc filesystem includes a great deal of additional kernel and hardware information in files like /proc/cpuinfo. (There has been a push to move information unrelated to processes out of /proc and into /sys.)
+
+
+## Swap Space
+- Not every partition on a disk contains a filesystem. It’s also possible to augment the RAM on a machine with disk space. If you run out of real memory, the Linux virtual memory system can automatically move pieces of memory to and from a disk storage. 
+
+- This is called swapping because pieces of idle programs are swapped to the disk in exchange for active pieces residing on the disk. The disk area used to store memory pages is called swap space (or just swap for short).
+
+```bash
+# to see the swap space use free command
+free
+# human readable format
+free -h
+```
+
+### **Using a Disk Partition as Swap Space**
+1. Make sure the partition is empty.
+2. Run mkswap dev, where dev is the partition’s device. This command puts
+a swap signature on the partition.
+3. Execute swapon dev to register the space with the kernel.
+4. After creating a swap partition, you can put a new swap entry in your `/etc/fstab` file to make the system use the swap space as soon as the machine boots.
+
+### **Using a File as Swap Space**
+
+```bash
+# num_mb = file size in MB
+dd if=/dev/zero of=swap_file bs=1024k count=num_mb
+mkswap swap_file
+swapon swap_file
+# to remove the swap partition or file from kernels active swap pool
+swapoff swap_file
+# or use a mountpoint
+swapoff mountpoint
 ```
